@@ -4,6 +4,7 @@ use std::{fs, path::PathBuf};
 pub struct DirInfo {
     name: String,
     path: PathBuf,
+    is_dir: bool
 }
 
 #[tauri::command]
@@ -36,8 +37,28 @@ pub async fn get_home() -> Result<Vec<DirInfo>, String> {
         goodpaths.push(DirInfo {
             name: path.file_name().to_string_lossy().into_owned(),
             path: path.path(),
+            is_dir:  path.metadata().unwrap().is_dir(),
         });
+       
     }
 
+    Ok(goodpaths)
+}
+#[tauri::command]
+pub async fn get_custom_dir(custom_path: String) -> Result<Vec<DirInfo>, String> {
+    let paths: fs::ReadDir = match fs::read_dir(custom_path) {
+        Ok(paths) => paths,
+        Err(e) => return Err(format!("Failed to read directory: {}", e)),
+    };
+    let mut goodpaths: Vec<DirInfo> = Vec::new();
+    for path in paths.flatten() {
+        println!("Name: {:?}", path);
+        goodpaths.push(DirInfo {
+            name: path.file_name().to_string_lossy().into_owned(),
+            path: path.path(),
+            is_dir:  path.metadata().unwrap().is_dir(),
+        });
+       
+    }
     Ok(goodpaths)
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+
 import {
   Calendar,
   ChevronRight,
@@ -9,6 +9,8 @@ import {
   Inbox,
   Search,
   Settings,
+  File,
+  Folder,
 } from "lucide-react";
 import {
   Sidebar,
@@ -30,7 +32,7 @@ import {
 } from "@/components/ui/collapsible";
 
 export function AppSidebar() {
-  const [dirs, setDirs] = useState<{name: string, path: string}[]>([]);
+  // const [dirs, setDirs] = useState<{name: string, path: string}[]>([]);
 //   async function get_dirs() {
 //     let response: string[] = await invoke("get_download_dirs");
 //     console.log(response);
@@ -40,11 +42,11 @@ export function AppSidebar() {
 //     get_dirs();
 //   }, []);
 
-  async function getHomeDirs() {
-    let response: {name: string, path: string}[] = await invoke("get_home");
-    console.log(response);
-    setDirs(response);
-  }
+  // async function getHomeDirs() {
+  //   let response: {name: string, path: string}[] = await invoke("get_home");
+  //   console.log(response);
+  //   setDirs(response);
+  // }
 
   return (
     <Sidebar collapsible="icon">
@@ -54,7 +56,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <Collapsible className="group">
               <SidebarMenu>
-                <SidebarMenuButton className="flex items-center justify-start" onClick={getHomeDirs}>
+                <SidebarMenuButton className="flex items-center justify-start" >
                   <Home />
                   Home
                 </SidebarMenuButton>
@@ -66,13 +68,13 @@ export function AppSidebar() {
                 </CollapsibleTrigger>
                 <CollapsibleContent className="overflow-hidden transition-all duration-300 ease-in-out">
                   <SidebarMenuSub className="space-y-1 pt-1">
-                    {dirs.map((dir, index) => (
+                    {/* {dirs.map((dir, index) => (
                       <SidebarMenuSubItem key={index}>
                         <SidebarMenuSubButton asChild>
                           <span>{dir.name}</span>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
-                    ))}
+                    ))} */}
                   </SidebarMenuSub>
                 </CollapsibleContent>
               </SidebarMenu>
