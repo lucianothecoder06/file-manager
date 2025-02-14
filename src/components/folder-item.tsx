@@ -13,10 +13,12 @@ export default function FolderItem({
   dir,
   index,
   setMainDir,
+  setMainPath,
 }: {
   dir: Dir;
   index: number;
-  setMainDir: Function,
+  setMainDir: Function;
+  setMainPath: Function;
 }) {
   const [dirs, setDirs] = useState<Dir[]>([]);
   const [open, setOpen] = useState<Boolean>(false);
@@ -39,14 +41,25 @@ export default function FolderItem({
         setOpen(!open);
       }}
     >
-      <CollapsibleTrigger className="flex gap-2 transition duration-300 " onDoubleClick={()=>{setMainDir(dirs)}}>
+      <CollapsibleTrigger
+        className="flex gap-2 transition duration-300 "
+        onDoubleClick={() => {
+          setMainDir(dirs);
+          setMainPath(dir.path);
+        }}
+      >
         {open ? <FolderOpen /> : <Folder />} {dir.name}
       </CollapsibleTrigger>
       <CollapsibleContent className="pl-4 text-popover-foreground outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2">
         {dirs.map((dir, subindex) => (
           <div key={subindex}>
             {dir.is_dir ? (
-              <FolderItem dir={dir} index={subindex} setMainDir={setMainDir}/>
+              <FolderItem
+                dir={dir}
+                index={subindex}
+                setMainDir={setMainDir}
+                setMainPath={setMainPath}
+              />
             ) : (
               <FileItem dir={dir} index={subindex} />
             )}

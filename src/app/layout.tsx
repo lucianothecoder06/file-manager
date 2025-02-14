@@ -26,10 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-stone-950 `}>
         <SidebarProvider>
           {/* <AppSidebar /> */}
-          <main>
+          <main className="w-full">
             {children}
           </main>
         </SidebarProvider>

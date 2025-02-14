@@ -12,43 +12,50 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
+interface ETab {
+  id: number;
+  path: string;
+}
 
 export default function Home() {
-  const [tabAmount, setTabAmout] = useState<number>(1);
-  const [tabs, addTab] = useState();
+  const [tabAmount, setTabAmout] = useState<number>(0);
   const [initialDir, setInitialDir] = useState("");
+  const [tabs, setTabs] = useState<ETab[]>([]);
 
   async function getInitDir() {
-    let response: string = await invoke("get_home_path"); 
+    let response: string = await invoke("get_home_path");
     setInitialDir(response);
+    setTabs([...tabs, { id: tabAmount + 1, path: response }]);
+    setTabAmout(tabAmount + 1);
   }
-  useEffect(()=>{getInitDir()},[])
-
+  useEffect(() => {
+    getInitDir();
+  }, []);
   return (
     <div className="w-full p-4">
       <Tabs defaultValue="account+0">
         <SidebarTrigger />
         <TabsList>
-        
-          {Array.from({ length: tabAmount }, (_, index) => (
+          {tabs.map((tab) => (
             <TabsTrigger
-              value={`account-${index}`}
-              key={index}
-              id={`account-${index}`}
+              value={`account-${tab.id}`}
+              key={tab.id}
+              id={`account-${tab.id}`}
             >
-              {"tab " + index}
+              {tab.path.slice(tab.path.lastIndexOf("\\"))}
             </TabsTrigger>
           ))}
           <Plus
             className="hover:cursor-pointer"
             onClick={() => {
               setTabAmout(tabAmount + 1);
+              setTabs([...tabs, { id: tabAmount + 1, path: initialDir }]);
             }}
           ></Plus>
         </TabsList>
-        {Array.from({ length: tabAmount }, (_, index) => (
-          <TabsContent key={index} value={`account-${index}`}>
-            <ExplorerTab path={initialDir}/>
+        {tabs.map((tab) => (
+          <TabsContent key={tab.id} value={`account-${tab.id}`}>
+            <ExplorerTab tab={tab} tabs={tabs} setTabs={setTabs} />
           </TabsContent>
         ))}
         <TabsContent value="password">Change your password here.</TabsContent>

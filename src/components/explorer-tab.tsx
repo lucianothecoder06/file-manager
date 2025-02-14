@@ -13,26 +13,31 @@ import {
   Settings,
   File,
   Folder,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 import type { Dir } from "@/lib/types";
 import FolderItem from "@/components/folder-item";
 import FileItem from "@/components/file-item";
 import { Input } from "./ui/input";
-
-export default function ExplorerTab({ path }: { path: string }) {
-  const [searchPath, setSearchPath] = useState<string>(path);
+interface ETab {
+  id: number;
+  path: string;
+}
+export default function ExplorerTab({
+  tab,
+  tabs,
+  setTabs,
+}: {
+  tab: ETab;
+  tabs: ETab[];
+  setTabs: Function;
+}) {
+  const [searchPath, setSearchPath] = useState<string>(tab.path);
   const [dirs, setDirs] = useState<Dir[]>([]);
   const [search, setSearch] = useState<string>("");
-  //   async function get_dirs() {
-  //     let response: string[] = await invoke("get_download_dirs");
-  //     console.log(response);
-  //     setDirs(response);
-  //   }
-  //   useEffect(() => {
-  //     get_dirs();
-  //   }, []);
 
-  async function getHomeDirs() {
+  async function getDirs() {
     let response: Dir[] = await invoke("get_custom_dir", {
       customPath: searchPath,
     });
@@ -40,22 +45,45 @@ export default function ExplorerTab({ path }: { path: string }) {
     setDirs(response);
   }
   useEffect(() => {
-    getHomeDirs();
-  }, []);
+    getDirs();
+    setTabs(
+      tabs.map((newTab) =>
+        newTab.id === tab.id ? { id: tab.id, path: searchPath } : newTab
+      )
+    );
+  }, [searchPath]);
+
+  function goBack() {
+    setSearchPath(searchPath.slice(0, searchPath.lastIndexOf("\\")));
+  }
 
   return (
-    <div className="w-full p-4 bg-stone-100 rounded-md -mt-4">
-      <Input
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-        }}
-      ></Input>
+    <div className="w-full p-4 bg-stone-100 rounded-md -mt-4 min-h-[90vh]">
+      <div className="flex flex-row gap-2 items-center mb-4">
+        <ArrowLeft
+          onClick={goBack}
+          className="hover:cursor-pointer transition duration-300"
+        />
+        <ArrowRight className="text-stone-300" />
+        {/* {searchPath} */}
+        <Input
+          value={searchPath}
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+        ></Input>
+      </div>
+
       <div className="grid grid-cols-2">
         {dirs.map((dir, index) => (
           <div key={index}>
             {dir.is_dir ? (
-              <FolderItem dir={dir} index={index} setMainDir={setDirs} />
+              <FolderItem
+                dir={dir}
+                index={index}
+                setMainDir={setDirs}
+                setMainPath={setSearchPath}
+              />
             ) : (
               <FileItem dir={dir} index={index} />
             )}
