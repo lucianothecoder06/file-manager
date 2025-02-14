@@ -17,7 +17,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::get_download_dirs,
             commands::get_home,
-            commands::get_custom_dir
+            commands::get_custom_dir,
+            commands::get_home_path,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
