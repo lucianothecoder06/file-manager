@@ -20,6 +20,7 @@ import type { Dir } from "@/lib/types";
 import FolderItem from "@/components/folder-item";
 import FileItem from "@/components/file-item";
 import { Input } from "./ui/input";
+
 interface ETab {
   id: number;
   path: string;
@@ -58,7 +59,7 @@ export default function ExplorerTab({
   }
 
   return (
-    <div className="w-full p-4 bg-stone-100 rounded-md -mt-4 min-h-[90vh]">
+    <div className="w-full p-4 bg-stone-100 rounded-md -mt-4 min-h-[92vh] max-h-[92vh]">
       <div className="flex flex-row gap-2 items-center mb-4">
         <ArrowLeft
           onClick={goBack}
@@ -72,9 +73,10 @@ export default function ExplorerTab({
             setSearch(e.target.value);
           }}
         ></Input>
+        <Input className="w-1/4" placeholder="Search..."/>
       </div>
 
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 overflow-auto max-h-[83vh] h-max border border-stone-200 rounded-md p-2">
         {dirs.map((dir, index) => (
           <div key={index}>
             {dir.is_dir ? (

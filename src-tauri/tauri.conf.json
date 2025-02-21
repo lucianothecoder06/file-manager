@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "file-manager",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.file-explorer.dev",
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",

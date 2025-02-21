@@ -18,7 +18,7 @@ interface ETab {
 }
 
 export default function Home() {
-  const [tabAmount, setTabAmout] = useState<number>(0);
+  const [tabAmount, setTabAmout] = useState<number>(1);
   const [initialDir, setInitialDir] = useState("");
   const [tabs, setTabs] = useState<ETab[]>([]);
 
