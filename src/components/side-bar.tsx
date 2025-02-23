@@ -1,15 +1,50 @@
-import { Home, Flag, Plus } from "lucide-react";
+
+import { Home, Flag, Plus, Download, Book } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { invoke } from "@tauri-apps/api/core";
 
-export default function SideBar() {
+
+export default function SideBar({ setSearchPath }: { setSearchPath: Function }) {
+
+  const goHome = async ()=>{
+    let response: string = await invoke("get_home_path");
+    setSearchPath(response);
+  } 
+  const goDownload = async ()=>{
+    let response: string = await invoke("get_download_path");
+    setSearchPath(response);
+  }
+  const goDocuments = async ()=>{
+    let response: string = await invoke("get_document_path");
+    setSearchPath(response);
+  }
+
+
   return (
     <div className="w-full h-full border-stone-200 border rounded-md p-2">
-      <div className="flex flex-col items-left justify-left w-full h-16">
+      <div className="flex flex-col items-left justify-left w-full">
         <span>Quick routes</span>
-        <div className="flex gap-2 items-center pl-2">
+        <div
+          className="flex gap-2 items-center pl-2 hover:cursor-pointer"
+          onClick={goHome}
+        >
           <Home className="h-4 w-4" />
           Home
+        </div>
+        <div
+          className="flex gap-2 items-center pl-2 hover:cursor-pointer"
+          onClick={goDocuments}
+        >
+          <Book className="h-4 w-4" />
+            Documents
+        </div>
+        <div
+          className="flex gap-2 items-center pl-2 hover:cursor-pointer"
+          onClick={goDownload}
+        >
+          <Download className="h-4 w-4" />
+          Download
         </div>
       </div>
       <Separator />
@@ -25,7 +60,7 @@ export default function SideBar() {
             Game files
           </Badge>
           <Badge className="flex gap-2 items-center pl-2 text-black border border-stone-300 bg-stone-50 hover:bg-stone-100 hover:cursor-pointer">
-            <Plus className="h-4 w-4 " /> 
+            <Plus className="h-4 w-4 " />
             Add a label
           </Badge>
         </div>

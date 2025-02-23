@@ -1,4 +1,4 @@
-use dirs::home_dir;
+use dirs::{home_dir, document_dir, download_dir};
 use std::path::Path;
 use std::{fs, path::PathBuf, time::SystemTime};
 // use std::fs::File;
@@ -12,20 +12,7 @@ pub struct DirInfo {
     file_type: Option<String>,
 }
 
-#[tauri::command]
-pub async fn get_download_dirs() -> Result<Vec<PathBuf>, String> {
-    let paths: fs::ReadDir = match fs::read_dir("C:\\") {
-        Ok(paths) => paths,
-        Err(e) => return Err(format!("Failed to read directory: {}", e)),
-    };
-    let mut goodpaths: Vec<PathBuf> = Vec::new();
-    for path in paths.flatten() {
-        println!("Name: {:?}", path);
-        goodpaths.push(path.path());
-    }
 
-    Ok(goodpaths)
-}
 #[tauri::command]
 pub async fn get_home() -> Result<Vec<DirInfo>, String> {
     let home_path: PathBuf = match home_dir() {
@@ -71,6 +58,27 @@ pub async fn get_home_path() -> Result<PathBuf, String> {
     };
     Ok(home_path)
 }
+
+#[tauri::command]
+pub async fn get_download_path() -> Result<PathBuf, String> {
+    let home_path: PathBuf = match download_dir() {
+        Some(home_path) => home_path,
+        None => return Err("Failed to load directory:".to_string()),
+    };
+    Ok(home_path)
+}
+
+#[tauri::command]
+pub async fn get_document_path() -> Result<PathBuf, String> {
+    let home_path: PathBuf = match document_dir() {
+        Some(home_path) => home_path,
+        None => return Err("Failed to load directory:".to_string()),
+    };
+    Ok(home_path)
+}
+
+
+
 
 #[tauri::command]
 pub async fn get_custom_dir(custom_path: String) -> Result<Vec<DirInfo>, String> {

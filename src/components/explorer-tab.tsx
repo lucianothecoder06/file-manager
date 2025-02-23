@@ -50,6 +50,11 @@ export default function ExplorerTab({
     console.log(response);
     setDirs(response);
   }
+  async function getInitDir() {
+    let response: string = await invoke("get_home_path");
+    setSearchPath(response);
+
+  }
   useEffect(() => {
     getDirs();
     setTabs(
@@ -58,6 +63,7 @@ export default function ExplorerTab({
       )
     );
   }, [searchPath]);
+
 
   function goBack() {
     setSearchPath(searchPath.slice(0, searchPath.lastIndexOf("\\")));
@@ -106,7 +112,7 @@ export default function ExplorerTab({
         className="w-full h-full gap-2"
       >
         <ResizablePanel defaultSize={10} maxSize={20} ref={refSide}>
-          <SideBar />
+          <SideBar setSearchPath={setSearchPath} />
         </ResizablePanel>
         <ResizableHandle />
 

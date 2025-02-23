@@ -1,4 +1,3 @@
-use sea_orm::Statement;
 use sea_orm_migration::prelude::*;
 use async_trait::async_trait;
 
@@ -12,6 +11,7 @@ impl MigrationTrait for Migration {
 
         db.execute_unprepared(
             "
+            
             CREATE TABLE `dir_entries` (
               `id` INTEGER PRIMARY KEY AUTOINCREMENT,
               `parent_id` INT DEFAULT NULL,

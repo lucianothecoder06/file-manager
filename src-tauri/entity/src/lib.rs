@@ -3,3 +3,5 @@
 pub mod prelude;
 
 pub mod dir_entries;
+pub mod quickpath;
+pub mod tags;
