@@ -6,12 +6,10 @@ publish = false
 
 [lib]
 name = "entity"
-path = "./lib.rs"
+path = "src/lib.rs"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
-sea-orm = "1.1.4"
 
-sea-orm-macros = "1.1.4"
-[dependenci1.1.4-orm]
-version = "0.12.4" # sea-orm version
+[dependencies.sea-orm]
+version = "1.1.5" # sea-orm version

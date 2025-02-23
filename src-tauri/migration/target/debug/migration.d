@@ -1,0 +1,1 @@
+C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\target\debug\migration.exe: C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\src\lib.rs C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\src\m20250223_210101_create_file_type.rs C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\src\main.rs

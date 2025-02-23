@@ -1,0 +1,10 @@
+C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\target\debug\deps\libhashlink-b4791aae48456582.rmeta: C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\lib.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\linked_hash_map.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\linked_hash_set.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\lru_cache.rs
+
+C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\target\debug\deps\libhashlink-b4791aae48456582.rlib: C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\lib.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\linked_hash_map.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\linked_hash_set.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\lru_cache.rs
+
+C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\target\debug\deps\hashlink-b4791aae48456582.d: C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\lib.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\linked_hash_map.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\linked_hash_set.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\lru_cache.rs
+
+C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\lib.rs:
+C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\linked_hash_map.rs:
+C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\linked_hash_set.rs:
+C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hashlink-0.10.0\src\lru_cache.rs:

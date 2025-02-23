@@ -1,0 +1,10 @@
+C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\target\debug\deps\libsea_query_binder-abc473375814065c.rmeta: C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src/lib.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\sqlx_sqlite.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\values.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\sqlx.rs
+
+C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\target\debug\deps\libsea_query_binder-abc473375814065c.rlib: C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src/lib.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\sqlx_sqlite.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\values.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\sqlx.rs
+
+C:\Users\lucia\Documents\CODE\rustCode\file-manager\src-tauri\migration\target\debug\deps\sea_query_binder-abc473375814065c.d: C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src/lib.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\sqlx_sqlite.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\values.rs C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\sqlx.rs
+
+C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src/lib.rs:
+C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\sqlx_sqlite.rs:
+C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\values.rs:
+C:\Users\lucia\.cargo\registry\src\index.crates.io-6f17d22bba15001f\sea-query-binder-0.7.0\src\sqlx.rs:

@@ -27,6 +27,6 @@ serde_json = "1.0.139"
 serde = { version = "1.0.218", features = ["derive"] }
 postgrest = "1.0"
 dotenv ="0.15.0"
-sea-orm = { version = "1.1.5", features = [ "sqlx-postgres", "runtime-tokio-native-tls", "macros" ] }
-entity = { path = "./src/entity" }
+sea-orm = { version = "1.1.5", features = [ "sqlx-sqlite", "runtime-tokio-native-tls", "macros" ] }
+entity = { path = "./entity" }
 sqlx ="0.8.3"
