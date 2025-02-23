@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { Folder, File, FolderOpen, Ellipsis } from "lucide-react";
 import type { Dir } from "@/lib/types";
 import { invoke } from "@tauri-apps/api/core";
-import { readFile } from '@tauri-apps/plugin-fs';
-
+import { readFile } from "@tauri-apps/plugin-fs";
 
 import {
   Popover,
@@ -37,7 +36,7 @@ function timeAgo(timestampSeconds: number): string {
 
 function getFileIcon(dir: Dir) {
   console.log(dir.file_type);
-  
+
   if (
     dir.file_type === "jpg" ||
     dir.file_type === "png" ||
@@ -45,17 +44,16 @@ function getFileIcon(dir: Dir) {
   ) {
     console.log("hola");
     return <img src={`${dir.path}`} width="24px" height="24px" />;
+  } else if (dir.file_type === "tsx") {
+    return (
+      <img src={`vivid/ts.svg`} width="16px" height="16px" />
+    );
   } else {
     return (
-      <img
-        src={`vivid/${dir.file_type}.svg`}
-        width="16px"
-        height="16px"
-      />
+      <img src={`vivid/${dir.file_type}.svg`} width="16px" height="16px" />
     );
   }
 }
-
 
 export default function FileItem({ dir, index }: { dir: Dir; index: number }) {
   const lastAccessed = timeAgo(dir.last_accessed.secs_since_epoch);
@@ -65,7 +63,7 @@ export default function FileItem({ dir, index }: { dir: Dir; index: number }) {
       className="text-black flex justify-between pr-4 col-span-1 gap-4"
       key={index}
     >
-      <div className="flex gap-4">
+      <div className="flex gap-4  hover:cursor-pointer">
         {getFileIcon(dir)}
 
         <span>{dir.name.substring(0, 30)}</span>

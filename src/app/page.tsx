@@ -8,8 +8,7 @@ import type { Dir } from "@/lib/types";
 import FolderItem from "@/components/folder-item";
 import FileItem from "@/components/file-item";
 import ExplorerTab from "@/components/explorer-tab";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface ETab {
@@ -34,19 +33,25 @@ export default function Home() {
   return (
     <div className="w-full p-4">
       <Tabs defaultValue="account+0">
-        <SidebarTrigger />
-        <TabsList>
+        <TabsList className="max-w-[85vw] overflow-x-auto h-fit ml-8">
           {tabs.map((tab) => (
             <TabsTrigger
+              className="flex items-center justify-between gap-8"
               value={`account-${tab.id}`}
               key={tab.id}
               id={`account-${tab.id}`}
             >
               {tab.path.slice(tab.path.lastIndexOf("\\"))}
+              <X
+                className="h-4"
+                onClick={() => {
+                  setTabs(tabs.filter((t) => t.id !== tab.id));
+                }}
+              />
             </TabsTrigger>
           ))}
           <Plus
-            className="hover:cursor-pointer"
+            className="hover:cursor-pointer h-5 ml-4"
             onClick={() => {
               setTabAmout(tabAmount + 1);
               setTabs([...tabs, { id: tabAmount + 1, path: initialDir }]);

@@ -1,30 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { invoke } from "@tauri-apps/api/core";
 
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import {
-  Calendar,
-  ChevronRight,
-  Inbox,
-  Search,
-  Settings,
-  File,
-  Folder,
-  ArrowLeft,
-  ArrowRight,
-} from "lucide-react";
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+
+import { ImperativePanelHandle } from "react-resizable-panels";
+
+import { Folder, ArrowLeft, ArrowRight, Sidebar, ScanEye } from "lucide-react";
 import type { Dir } from "@/lib/types";
 import FolderItem from "@/components/folder-item";
 import FileItem from "@/components/file-item";
 import { Input } from "./ui/input";
+import SideBar from "./side-bar";
 
 interface ETab {
   id: number;
   path: string;
 }
+
 export default function ExplorerTab({
   tab,
   tabs,
@@ -37,6 +35,13 @@ export default function ExplorerTab({
   const [searchPath, setSearchPath] = useState<string>(tab.path);
   const [dirs, setDirs] = useState<Dir[]>([]);
   const [search, setSearch] = useState<string>("");
+  const [sideWidth, setSideWidth] = useState<number>(0);
+  const [preview, setPreview] = useState<string>(tab.path);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isPreCollapsed, setIsPreCollapsed] = useState(false);
+
+  const refSide = useRef<ImperativePanelHandle>(null);
+  const refPreview = useRef<ImperativePanelHandle>(null);
 
   async function getDirs() {
     let response: Dir[] = await invoke("get_custom_dir", {
@@ -58,9 +63,20 @@ export default function ExplorerTab({
     setSearchPath(searchPath.slice(0, searchPath.lastIndexOf("\\")));
   }
 
+
+
   return (
     <div className="w-full p-4 bg-stone-100 rounded-md -mt-4 min-h-[92vh] max-h-[92vh]">
       <div className="flex flex-row gap-2 items-center mb-4">
+        <Sidebar
+          onClick={() => {
+            refSide.current?.resize(isCollapsed ? 10 : 0);
+            setIsCollapsed(!isCollapsed);
+          }}
+          className={`hover:cursor-pointer transition-colors  ${
+            !isCollapsed ? "text-black" : "text-stone-300 hover:text-stone-500"
+          }`}
+        />
         <ArrowLeft
           onClick={goBack}
           className="hover:cursor-pointer transition duration-300"
@@ -73,25 +89,58 @@ export default function ExplorerTab({
             setSearch(e.target.value);
           }}
         ></Input>
-        <Input className="w-1/4" placeholder="Search..."/>
+        <Input className="w-1/4" placeholder="Search..." />
+        <ScanEye
+          className={`hover:cursor-pointer transition-colors h-8 ${
+            !isPreCollapsed ? "text-black" : "text-stone-400"
+          }`}
+          onClick={() => {
+            refPreview.current?.resize(isPreCollapsed ? 10 : 0);
+            setIsPreCollapsed(!isPreCollapsed);
+          }}
+        />
       </div>
 
-      <div className="grid grid-cols-2 overflow-auto max-h-[83vh] h-max border border-stone-200 rounded-md p-2">
-        {dirs.map((dir, index) => (
-          <div key={index}>
-            {dir.is_dir ? (
-              <FolderItem
-                dir={dir}
-                index={index}
-                setMainDir={setDirs}
-                setMainPath={setSearchPath}
-              />
-            ) : (
-              <FileItem dir={dir} index={index} />
-            )}
+      <ResizablePanelGroup
+        direction="horizontal"
+        className="w-full h-full gap-2"
+      >
+        <ResizablePanel defaultSize={10} maxSize={20} ref={refSide}>
+          <SideBar />
+        </ResizablePanel>
+        <ResizableHandle />
+
+        <ResizablePanel minSize={50}>
+          <div className="flex flex-col overflow-auto max-h-[83vh] h-[93vh] border border-stone-200 rounded-md p-2">
+            {dirs.map((dir, index) => (
+              <div key={index} className="col-span-1 row-span-1">
+                {dir.is_dir ? (
+                  <FolderItem
+                    dir={dir}
+                    index={index}
+                    setMainDir={setDirs}
+                    setMainPath={setSearchPath}
+                  />
+                ) : (
+                  <FileItem dir={dir} index={index} />
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </ResizablePanel>
+
+        <ResizableHandle />
+
+        <ResizablePanel defaultSize={15} maxSize={25} ref={refPreview}>
+          <div className="w-full h-full border-stone-200 border rounded-md p-2 flex flex-col items-center">
+            <span className="w-full text-left text-stone-300">Preview</span>
+            <Folder className="w-32 h-32" />
+            <h3>{searchPath}</h3>
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+
+      <div className="flex flex-row gap-2 items-center"></div>
     </div>
   );
 }
