@@ -8,6 +8,8 @@
   "permissions": [
     "core:default",
     "fs:default",
+    "sql:default",
+    "sql:allow-execute",
     {
       "identifier": "fs:allow-read",
       "allow": [{ "path": "$APPDATA/*" }]

@@ -1,4 +1,4 @@
-use dirs::{home_dir, document_dir, download_dir};
+use dirs::{document_dir, download_dir, home_dir};
 use std::path::Path;
 use std::{fs, path::PathBuf, time::SystemTime};
 // use std::fs::File;
@@ -10,8 +10,8 @@ pub struct DirInfo {
     is_dir: bool,
     last_accessed: SystemTime,
     file_type: Option<String>,
+    size: u64,
 }
-
 
 #[tauri::command]
 pub async fn get_home() -> Result<Vec<DirInfo>, String> {
@@ -25,7 +25,7 @@ pub async fn get_home() -> Result<Vec<DirInfo>, String> {
     };
     let mut goodpaths: Vec<DirInfo> = Vec::new();
     for path in paths.flatten() {
-        println!("Name: {:?}", path);
+        // println!("Name: {:?}", path);
 
         let accessed: SystemTime = match path.metadata().unwrap().accessed() {
             Ok(last_accessed) => last_accessed,
@@ -43,6 +43,7 @@ pub async fn get_home() -> Result<Vec<DirInfo>, String> {
             is_dir: path.metadata().unwrap().is_dir(),
             last_accessed: accessed,
             file_type,
+            size: path.metadata().unwrap().len(),
         });
         //
     }
@@ -77,9 +78,6 @@ pub async fn get_document_path() -> Result<PathBuf, String> {
     Ok(home_path)
 }
 
-
-
-
 #[tauri::command]
 pub async fn get_custom_dir(custom_path: String) -> Result<Vec<DirInfo>, String> {
     let paths: fs::ReadDir = match fs::read_dir(custom_path) {
@@ -87,8 +85,9 @@ pub async fn get_custom_dir(custom_path: String) -> Result<Vec<DirInfo>, String>
         Err(e) => return Err(format!("Failed to read directory: {}", e)),
     };
     let mut goodpaths: Vec<DirInfo> = Vec::new();
+
     for path in paths.flatten() {
-        println!("Name: {:?}", path);
+        // println!("Name: {:?}", path);
         let accessed: SystemTime = match path.metadata().unwrap().accessed() {
             Ok(last_accessed) => last_accessed,
             Err(_) => SystemTime::now(),
@@ -104,6 +103,7 @@ pub async fn get_custom_dir(custom_path: String) -> Result<Vec<DirInfo>, String>
             is_dir: path.metadata().unwrap().is_dir(),
             last_accessed: accessed,
             file_type,
+            size: path.metadata().unwrap().len(),
         });
     }
     Ok(goodpaths)

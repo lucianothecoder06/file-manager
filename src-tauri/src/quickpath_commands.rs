@@ -28,10 +28,12 @@ pub async fn create_quickpath(new_quickpath: QuickPathData) -> Result<String, St
         full_path: Set(new_quickpath.path.to_owned()),
         parent_id: Set(new_quickpath.parent_id),
         name: Set(new_quickpath.name.to_owned()),
+        is_dir: Set(true),
         ..Default::default()
     }
     .save(&db)
     .await;
+
     match quickpath {
         Ok(_) => println!("QuickPath created"),
         Err(e) => return Err(e.to_string()),

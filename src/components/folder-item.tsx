@@ -5,7 +5,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Folder, File, FolderOpen } from "lucide-react";
+
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Folder, FolderOpen, Wrench, Notebook } from "lucide-react";
 import type { Dir } from "@/lib/types";
 import { invoke } from "@tauri-apps/api/core";
 import FileItem from "./file-item";
@@ -17,14 +24,14 @@ export default function FolderItem({
 }: {
   dir: Dir;
   index: number;
-  setMainDir: Function;
-  setMainPath: Function;
+  setMainDir: (dirs: Dir[]) => void;
+  setMainPath: (path: string) => void;
 }) {
   const [dirs, setDirs] = useState<Dir[]>([]);
-  const [open, setOpen] = useState<Boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   async function getDirs() {
-    let response: Dir[] = await invoke("get_custom_dir", {
+    const response: Dir[] = await invoke("get_custom_dir", {
       customPath: dir.path,
     });
     console.log(response);
@@ -35,37 +42,54 @@ export default function FolderItem({
   }, []);
 
   return (
-    <Collapsible
-      key={index}
-      onOpenChange={() => {
-        setOpen(!open);
-      }}
-    >
-      <CollapsibleTrigger
-        className="flex gap-2 transition duration-300 "
-        onDoubleClick={() => {
-          setMainDir(dirs);
-          setMainPath(dir.path);
+    <ContextMenu>
+      <Collapsible
+        key={index}
+        onOpenChange={() => {
+          setOpen(!open);
         }}
       >
-        {open ? <FolderOpen /> : <Folder />} {dir.name}
-      </CollapsibleTrigger>
-      <CollapsibleContent className="pl-4 text-popover-foreground outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-20 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2">
-        {dirs.map((dir, subindex) => (
-          <div key={subindex} className="border-b border-stone-200">
-            {dir.is_dir ? (
-              <FolderItem
-                dir={dir}
-                index={subindex}
-                setMainDir={setMainDir}
-                setMainPath={setMainPath}
-              />
-            ) : (
-              <FileItem dir={dir} index={subindex} />
-            )}
-          </div>
-        ))}
-      </CollapsibleContent>
-    </Collapsible>
+        <ContextMenuTrigger>
+          <CollapsibleTrigger
+            className="flex gap-2 transition duration-300 "
+            onDoubleClick={() => {
+              setMainDir(dirs);
+              setMainPath(dir.path);
+            }}
+          >
+            {open ? <FolderOpen /> : <Folder />} {dir.name}
+          </CollapsibleTrigger>
+        </ContextMenuTrigger>
+        <CollapsibleContent className="pl-4 text-popover-foreground outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-20 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2">
+          {dirs.map((dir, subindex) => (
+            <div key={subindex} className="border-b border-stone-200">
+              {dir.is_dir ? (
+                <FolderItem
+                  dir={dir}
+                  index={subindex}
+                  setMainDir={setMainDir}
+                  setMainPath={setMainPath}
+                />
+              ) : (
+                <FileItem dir={dir} index={subindex} />
+              )}
+            </div>
+          ))}
+        </CollapsibleContent>
+      </Collapsible>
+      <ContextMenuContent>
+        <ContextMenuItem>Profile</ContextMenuItem>
+        <ContextMenuItem>Billing</ContextMenuItem>
+        <ContextMenuItem
+          onClick={() => navigator.clipboard.writeText(dir.path)}
+          className="flex items-center gap-2"
+        >
+          <Notebook className="h-5" /> Copy as path
+        </ContextMenuItem>
+        <ContextMenuItem className="flex items-center gap-2">
+          <Wrench className="h-5" /> <span>Propperties </span>
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }

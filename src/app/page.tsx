@@ -4,12 +4,8 @@ import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import type { Dir } from "@/lib/types";
-import FolderItem from "@/components/folder-item";
-import FileItem from "@/components/file-item";
 import ExplorerTab from "@/components/explorer-tab";
 import { Plus, X } from "lucide-react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface ETab {
   id: number;
@@ -22,18 +18,21 @@ export default function Home() {
   const [tabs, setTabs] = useState<ETab[]>([]);
 
   async function getInitDir() {
-    let response: string = await invoke("get_home_path");
+    await invoke("init_db_and_run_migrations");
+    const response: string = await invoke("get_home_path");
     setInitialDir(response);
-    setTabs([...tabs, { id: tabAmount + 1, path: response }]);
+    setTabs([{ id: tabAmount + 1, path: response }]);
     setTabAmout(tabAmount + 1);
   }
+
   useEffect(() => {
     getInitDir();
-  }, []);
+
+  },[]);
   return (
     <div className="w-full p-4">
       <Tabs defaultValue="account+0">
-        <TabsList className="max-w-[85vw] overflow-x-auto h-fit ml-8">
+        <TabsList className="max-w-[85vw] overflow-x-auto h-fit ml-8 bg-stone-100" >
           {tabs.map((tab) => (
             <TabsTrigger
               className="flex items-center justify-between gap-8"
@@ -63,7 +62,6 @@ export default function Home() {
             <ExplorerTab tab={tab} tabs={tabs} setTabs={setTabs} />
           </TabsContent>
         ))}
-        <TabsContent value="password">Change your password here.</TabsContent>
       </Tabs>
     </div>
   );

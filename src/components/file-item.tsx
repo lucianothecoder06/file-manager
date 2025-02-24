@@ -1,16 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Folder, File, FolderOpen, Ellipsis } from "lucide-react";
+
 import type { Dir } from "@/lib/types";
-import { invoke } from "@tauri-apps/api/core";
-import { readFile } from "@tauri-apps/plugin-fs";
 
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "./ui/button";
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Wrench, Notebook } from "lucide-react";
 
 function timeAgo(timestampSeconds: number): string {
   const pastDate = new Date(timestampSeconds * 1000); // Convert seconds to milliseconds
@@ -43,14 +41,22 @@ function getFileIcon(dir: Dir) {
     dir.file_type === "jpeg"
   ) {
     console.log("hola");
-    return <img src={`${dir.path}`} width="24px" height="24px" />;
+    return (
+      <picture>
+        <img src={`${dir.path}`} width="24px" height="24px" alt="." />;
+      </picture>
+    );
   } else if (dir.file_type === "tsx") {
     return (
-      <img src={`vivid/ts.svg`} width="16px" height="16px" />
+      <picture>
+        <img src={`vivid/ts.svg`} width="16px" height="16px" alt="." />;
+      </picture>
     );
   } else {
     return (
-      <img src={`vivid/${dir.file_type}.svg`} width="16px" height="16px" />
+      <picture>
+        <img src={`vivid/${dir.file_type}.svg`} width="16px" height="16px" alt="."/>
+      </picture>
     );
   }
 }
@@ -59,32 +65,34 @@ export default function FileItem({ dir, index }: { dir: Dir; index: number }) {
   const lastAccessed = timeAgo(dir.last_accessed.secs_since_epoch);
 
   return (
-    <div
-      className="text-black flex justify-between pr-4 col-span-1 gap-4"
-      key={index}
-    >
-      <div className="flex gap-4  hover:cursor-pointer">
-        {getFileIcon(dir)}
+    <ContextMenu>
+      <ContextMenuTrigger
+        className="text-black flex justify-between pr-4 col-span-1 gap-4"
+        key={index}
+      >
+        <div className="flex gap-4  hover:cursor-pointer">
+          {getFileIcon(dir)}
 
-        <span>{dir.name.substring(0, 30)}</span>
-      </div>
-      <div className="flex items-center justify-center gap-2">
-        <span>{lastAccessed}</span>
-        <Popover>
-          <PopoverTrigger>
-            <Ellipsis />
-          </PopoverTrigger>
-          <PopoverContent className="w-44">
-            <div className="text-sm flex flex-col gap-4">
-              <Button>Open</Button>
-              <Button>Copy</Button>
-              <Button>Move</Button>
-              <Button>Properties</Button>
-              <Button>Delete</Button>
-            </div>
-          </PopoverContent>
-        </Popover>
-      </div>
-    </div>
+          <span>{dir.name.substring(0, 30)}</span>
+        </div>
+        <div className="flex items-center justify-center gap-2">
+          <span>{lastAccessed}</span>
+        </div>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem>Profile</ContextMenuItem>
+        <ContextMenuItem>Billing</ContextMenuItem>
+        <ContextMenuItem
+          onClick={() => navigator.clipboard.writeText(dir.path)}
+          className="flex items-center gap-2"
+        >
+          <Notebook className="h-5" /> Copy as path
+        </ContextMenuItem>
+        <ContextMenuItem className="flex items-center gap-2">
+          <Wrench className="h-5" /> <span>Propperties </span>
+        </ContextMenuItem>
+        <ContextMenuItem>{dir.size} bytes</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }

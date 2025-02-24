@@ -30,13 +30,10 @@ export default function ExplorerTab({
 }: {
   tab: ETab;
   tabs: ETab[];
-  setTabs: Function;
+  setTabs: (tabs: ETab[]) => void;
 }) {
   const [searchPath, setSearchPath] = useState<string>(tab.path);
   const [dirs, setDirs] = useState<Dir[]>([]);
-  const [search, setSearch] = useState<string>("");
-  const [sideWidth, setSideWidth] = useState<number>(0);
-  const [preview, setPreview] = useState<string>(tab.path);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isPreCollapsed, setIsPreCollapsed] = useState(false);
 
@@ -44,17 +41,13 @@ export default function ExplorerTab({
   const refPreview = useRef<ImperativePanelHandle>(null);
 
   async function getDirs() {
-    let response: Dir[] = await invoke("get_custom_dir", {
+    const response: Dir[] = await invoke("get_custom_dir", {
       customPath: searchPath,
     });
     console.log(response);
     setDirs(response);
   }
-  async function getInitDir() {
-    let response: string = await invoke("get_home_path");
-    setSearchPath(response);
-
-  }
+  
   useEffect(() => {
     getDirs();
     setTabs(
@@ -64,12 +57,9 @@ export default function ExplorerTab({
     );
   }, [searchPath]);
 
-
   function goBack() {
     setSearchPath(searchPath.slice(0, searchPath.lastIndexOf("\\")));
   }
-
-
 
   return (
     <div className="w-full p-4 bg-stone-100 rounded-md -mt-4 min-h-[92vh] max-h-[92vh]">
@@ -90,10 +80,8 @@ export default function ExplorerTab({
         <ArrowRight className="text-stone-300" />
         {/* {searchPath} */}
         <Input
-          value={searchPath}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
+          defaultValue={searchPath}
+          
         ></Input>
         <Input className="w-1/4" placeholder="Search..." />
         <ScanEye
@@ -111,13 +99,18 @@ export default function ExplorerTab({
         direction="horizontal"
         className="w-full h-full gap-2"
       >
-        <ResizablePanel defaultSize={10} maxSize={20} ref={refSide}>
+        <ResizablePanel
+          defaultSize={10}
+          maxSize={20}
+          ref={refSide}
+          className="bg-stone-100 rounded-md"
+        >
           <SideBar setSearchPath={setSearchPath} />
         </ResizablePanel>
         <ResizableHandle />
 
         <ResizablePanel minSize={50}>
-          <div className="flex flex-col overflow-auto max-h-[83vh] h-[93vh] border border-stone-200 rounded-md p-2">
+          <div className="flex flex-col overflow-auto max-h-[83vh] h-[93vh] border bg-stone-100 border-stone-200 rounded-md p-2">
             {dirs.map((dir, index) => (
               <div key={index} className="col-span-1 row-span-1">
                 {dir.is_dir ? (
@@ -137,7 +130,12 @@ export default function ExplorerTab({
 
         <ResizableHandle />
 
-        <ResizablePanel defaultSize={15} maxSize={25} ref={refPreview}>
+        <ResizablePanel
+          defaultSize={15}
+          maxSize={25}
+          ref={refPreview}
+          className="bg-stone-100 rounded-md"
+        >
           <div className="w-full h-full border-stone-200 border rounded-md p-2 flex flex-col items-center">
             <span className="w-full text-left text-stone-300">Preview</span>
             <Folder className="w-32 h-32" />

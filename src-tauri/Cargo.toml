@@ -29,4 +29,6 @@ postgrest = "1.0"
 dotenv ="0.15.0"
 sea-orm = { version = "1.1.5", features = [ "sqlx-sqlite", "runtime-tokio-native-tls", "macros" ] }
 entity = { path = "./entity" }
+migration = {path="./migration"}
 sqlx ="0.8.3"
+tauri-plugin-sql = { version = "2.2.0", features = ["sqlite"] }

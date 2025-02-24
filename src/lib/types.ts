@@ -7,4 +7,5 @@ export type Dir = {
         secs_since_epoch: number,
     },
     file_type: string,
+    size: number,
 }
