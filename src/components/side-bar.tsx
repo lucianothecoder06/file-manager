@@ -18,6 +18,7 @@ export default function SideBar({
   setSearchPath: (path: string) => void;
 }) {
   const [quickPaths, setQuickPaths] = useState<QuickPath[]>([]);
+  const [dbConnection, setDbConnection] = useState<string>("Connecting...");
 
   const goHome = async () => {
     const response: string = await invoke("get_home_path");
@@ -36,13 +37,18 @@ export default function SideBar({
     const response: QuickPath[] = await invoke("get_quickpaths");
     setQuickPaths(response);
   }
+  async function getDbConnection() {
+    const response: string = await invoke("setup_database");
+    setDbConnection(response);
+  }
 
   useEffect(() => {
+    getDbConnection();
     getQuickPaths();
   }, []);
 
   return (
-    <div className="w-full h-full border-stone-200 border rounded-md p-2">
+    <div className="w-full flex flex-col justify-between h-full border-stone-200 border rounded-md p-2">
       <div className="flex flex-col items-left justify-left w-full mb-4">
         <span>Quick routes</span>
         <div
@@ -93,6 +99,16 @@ export default function SideBar({
           <Badge className="flex gap-2 items-center pl-2 text-black border border-stone-300 bg-stone-50 hover:bg-stone-100 hover:cursor-pointer">
             <Plus className="h-4 w-4 " />
             Add a label
+          </Badge>
+        </div>
+      </div>
+      <Separator />
+      <div className="my-4">
+        <span>Database</span>
+        <div className="flex flex-col gap-2 pl-2">
+          <Badge className="flex gap-2 items-center bg-green-600">
+            <Flag className="h-4 w-4" />
+            {dbConnection}
           </Badge>
         </div>
       </div>

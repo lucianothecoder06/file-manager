@@ -8,7 +8,7 @@ use dotenv::dotenv;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     dotenv().ok(); 
-    let db_url: String ="sqlite:./db.sqlite?mode=rwc".to_string();
+    let db_url: String ="sqlite:db.sqlite?mode=rwc".to_string();
     let migrations = vec![
         // Define your migrations here
         Migration {
@@ -76,6 +76,8 @@ pub fn run() {
             commands::get_document_path,
             quickpath_commands::create_quickpath,
             quickpath_commands::get_quickpaths,
+            quickpath_commands::get_connection_status,
+            quickpath_commands::setup_database,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

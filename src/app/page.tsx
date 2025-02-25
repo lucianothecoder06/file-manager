@@ -18,7 +18,6 @@ export default function Home() {
   const [tabs, setTabs] = useState<ETab[]>([]);
 
   async function getInitDir() {
-    await invoke("init_db_and_run_migrations");
     const response: string = await invoke("get_home_path");
     setInitialDir(response);
     setTabs([{ id: tabAmount + 1, path: response }]);
