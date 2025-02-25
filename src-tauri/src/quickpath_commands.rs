@@ -1,6 +1,5 @@
 use dotenv::dotenv;
 use sea_orm::{Database, DatabaseConnection, Set};
-use std::env::var;
 
 use entity::quickpath as QuickPathTable;
 use entity::quickpath::Model as QuickPath;
@@ -65,9 +64,9 @@ pub async fn get_connection_status() -> Result<String, String> {
     let db_url = format!("sqlite:{}?mode=rwc", db_path.display());
 
     match Database::connect(db_url).await {
-        Ok(_) => return Ok("connected".to_string()),
-        Err(e) => return Err(e.to_string()),
-    };
+        Ok(_) => Ok("connected".to_string()),
+        Err(e) =>  Err(e.to_string()),
+    }
 }
 
 #[tauri::command]

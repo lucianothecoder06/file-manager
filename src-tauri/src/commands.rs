@@ -113,3 +113,18 @@ pub async fn get_custom_dir(custom_path: String) -> Result<Vec<DirInfo>, String>
 // async fn open_file() -> Result<(), String> {
 //   Ok(())
 // }
+#[tauri::command]
+pub async fn delete_file(custom_path: String) -> Result<String, String> {
+    match fs::remove_file(custom_path) {
+        Ok(_) => Ok("File deleted".to_string()),
+        Err(e) => Err(e.to_string()),
+    }
+}
+
+#[tauri::command]
+pub async fn delete_dir(custom_path: String) -> Result<String, String> {
+    match fs::remove_dir_all(custom_path) {
+        Ok(_) => Ok("Folder deleted".to_string()),
+        Err(e) => Err(e.to_string()),
+    }
+}

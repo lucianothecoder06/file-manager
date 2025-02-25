@@ -74,6 +74,8 @@ pub fn run() {
             commands::get_home_path,
             commands::get_download_path,
             commands::get_document_path,
+            commands::delete_file,
+            commands::delete_dir,
             quickpath_commands::create_quickpath,
             quickpath_commands::get_quickpaths,
             quickpath_commands::get_connection_status,

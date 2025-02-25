@@ -29,7 +29,7 @@ export default function Home() {
 
   },[]);
   return (
-    <div className="w-full p-4">
+    <div className="w-full px-4">
       <Tabs defaultValue="account+0">
         <TabsList className="max-w-[85vw] overflow-x-auto h-fit ml-8 bg-stone-100" >
           {tabs.map((tab) => (

@@ -62,7 +62,7 @@ export default function ExplorerTab({
   }
 
   return (
-    <div className="w-full p-4 bg-stone-100 rounded-md -mt-4 min-h-[92vh] max-h-[92vh]">
+    <div className="w-full p-4 bg-stone-100 rounded-md -mt-4 min-h-[94vh] max-h-[94vh]">
       <div className="flex flex-row gap-2 items-center mb-4">
         <Sidebar
           onClick={() => {

@@ -1,6 +1,7 @@
 "use client";
 
 import type { Dir } from "@/lib/types";
+import { invoke } from "@tauri-apps/api/core";
 
 import {
   ContextMenu,
@@ -8,7 +9,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { Wrench, Notebook } from "lucide-react";
+import { Wrench, Notebook, Trash } from "lucide-react";
 
 function timeAgo(timestampSeconds: number): string {
   const pastDate = new Date(timestampSeconds * 1000); // Convert seconds to milliseconds
@@ -55,7 +56,12 @@ function getFileIcon(dir: Dir) {
   } else {
     return (
       <picture>
-        <img src={`vivid/${dir.file_type}.svg`} width="16px" height="16px" alt="."/>
+        <img
+          src={`vivid/${dir.file_type}.svg`}
+          width="16px"
+          height="16px"
+          alt="."
+        />
       </picture>
     );
   }
@@ -63,6 +69,12 @@ function getFileIcon(dir: Dir) {
 
 export default function FileItem({ dir, index }: { dir: Dir; index: number }) {
   const lastAccessed = timeAgo(dir.last_accessed.secs_since_epoch);
+
+  const handleDelete = async ()=>{
+    await invoke("delete_file", {
+      customPath: dir.path,
+    })
+  }
 
   return (
     <ContextMenu>
@@ -81,7 +93,10 @@ export default function FileItem({ dir, index }: { dir: Dir; index: number }) {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem>Profile</ContextMenuItem>
-        <ContextMenuItem>Billing</ContextMenuItem>
+        <ContextMenuItem onClick={handleDelete}>
+          <Trash className="h-5"/>
+          Delete
+        </ContextMenuItem>
         <ContextMenuItem
           onClick={() => navigator.clipboard.writeText(dir.path)}
           className="flex items-center gap-2"

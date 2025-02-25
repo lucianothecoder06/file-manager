@@ -18,17 +18,18 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2.0.4", features = [] }
 
 [dependencies]
-log = "0.4"
+log = "0.4.26"
 tauri = { version = "2.2.4", features = [] }
-tauri-plugin-log = "2.0.0-rc"
+tauri-plugin-log = "2.2.2"
 tauri-plugin-fs = "2"
 dirs = "6.0.0"
 serde_json = "1.0.139"
 serde = { version = "1.0.218", features = ["derive"] }
 postgrest = "1.0"
 dotenv ="0.15.0"
-sea-orm = { version = "1.1.5", features = [ "sqlx-sqlite", "runtime-tokio-native-tls", "macros" ] }
+sea-orm = { version = "1.1.6", features = [ "sqlx-sqlite", "runtime-tokio-native-tls", "macros" ] }
 entity = { path = "./entity" }
 migration = {path="./migration"}
 sqlx ="0.8.3"
 tauri-plugin-sql = { version = "2.2.0", features = ["sqlite"] }
+walkdir = "2"
