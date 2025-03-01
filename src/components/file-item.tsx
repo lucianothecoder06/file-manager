@@ -10,6 +10,8 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { Wrench, Notebook, Trash } from "lucide-react";
+import { formatSize } from "@/lib/utils";
+import { Button } from "./ui/button";
 
 function timeAgo(timestampSeconds: number): string {
   const pastDate = new Date(timestampSeconds * 1000); // Convert seconds to milliseconds
@@ -94,7 +96,6 @@ export default function FileItem({
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem>Profile</ContextMenuItem>
         <ContextMenuItem onClick={handleDelete}>
           <Trash className="h-5" />
           Delete
@@ -108,7 +109,10 @@ export default function FileItem({
         <ContextMenuItem className="flex items-center gap-2">
           <Wrench className="h-5" /> <span>Propperties </span>
         </ContextMenuItem>
-        <ContextMenuItem>{dir.size} bytes</ContextMenuItem>
+        <ContextMenuItem>{formatSize(dir.size)}</ContextMenuItem>
+        <ContextMenuItem>
+          <Button className="w-full text-xs">add label</Button>
+        </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   );

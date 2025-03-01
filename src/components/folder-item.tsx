@@ -16,6 +16,10 @@ import { Folder, FolderOpen, Wrench, Notebook, Trash } from "lucide-react";
 import type { Dir } from "@/lib/types";
 import { invoke } from "@tauri-apps/api/core";
 import FileItem from "./file-item";
+import { formatSize } from "@/lib/utils";
+
+
+
 export default function FolderItem({
   dir,
   index,
@@ -111,6 +115,7 @@ export default function FolderItem({
         <ContextMenuItem className="flex items-center gap-2">
           <Wrench className="h-5" /> <span>Propperties </span>
         </ContextMenuItem>
+        <ContextMenuItem>{formatSize(dir.size)}</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   );

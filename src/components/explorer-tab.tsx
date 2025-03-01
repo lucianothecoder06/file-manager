@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { invoke } from "@tauri-apps/api/core";
 
 import {
@@ -18,6 +18,7 @@ import {
   Sidebar,
   ScanEye,
   Search,
+  PlusCircle,
 } from "lucide-react";
 import type { Dir } from "@/lib/types";
 import FolderItem from "@/components/folder-item";
@@ -45,6 +46,16 @@ export default function ExplorerTab({
   const [isPreCollapsed, setIsPreCollapsed] = useState(false);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
+  const handleKeyPress = useCallback((event: KeyboardEvent) => {
+    console.log("Key pressed:", event.key);
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   const refSide = useRef<ImperativePanelHandle>(null);
   const refPreview = useRef<ImperativePanelHandle>(null);
@@ -70,8 +81,7 @@ export default function ExplorerTab({
   useEffect(() => {
     if (search) {
       handleSearch();
-    }
-    else{
+    } else {
       getDirs();
     }
   }, [search]);
@@ -101,13 +111,16 @@ export default function ExplorerTab({
             !isCollapsed ? "text-black" : "text-stone-300 hover:text-stone-500"
           }`}
         />
+
+        <PlusCircle />
+
         <ArrowLeft
           onClick={goBack}
           className="hover:cursor-pointer transition duration-300"
         />
         <ArrowRight className="text-stone-300" />
         {/* {searchPath} */}
-        <Input value={searchPath}></Input>
+        <Input value={searchPath} onChange={() => {}}></Input>
         <Input
           className="w-1/4"
           placeholder="Search..."
@@ -175,8 +188,8 @@ export default function ExplorerTab({
         >
           <div className="w-full h-full border-stone-200 border rounded-md p-2 flex flex-col items-center">
             <span className="w-full text-left text-stone-300">Preview</span>
-            <Folder className="w-32 h-32" />
-            <h3>{searchPath}</h3>
+            <Folder className="w-4/6 h-auto" />
+            <h3 className=" text-wrap w-5/6">{searchPath}</h3>
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
