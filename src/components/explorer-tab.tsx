@@ -11,7 +11,14 @@ import {
 
 import { ImperativePanelHandle } from "react-resizable-panels";
 
-import { Folder, ArrowLeft, ArrowRight, Sidebar, ScanEye } from "lucide-react";
+import {
+  Folder,
+  ArrowLeft,
+  ArrowRight,
+  Sidebar,
+  ScanEye,
+  Search,
+} from "lucide-react";
 import type { Dir } from "@/lib/types";
 import FolderItem from "@/components/folder-item";
 import FileItem from "@/components/file-item";
@@ -36,6 +43,8 @@ export default function ExplorerTab({
   const [dirs, setDirs] = useState<Dir[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isPreCollapsed, setIsPreCollapsed] = useState(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
 
   const refSide = useRef<ImperativePanelHandle>(null);
   const refPreview = useRef<ImperativePanelHandle>(null);
@@ -47,7 +56,26 @@ export default function ExplorerTab({
     console.log(response);
     setDirs(response);
   }
-  
+
+  async function handleSearch() {
+    const response: Dir[] = await invoke("search", {
+      customPath: searchPath,
+      searchQuery: search,
+    });
+    setDirs(response);
+    console.log("results");
+    console.log(response);
+  }
+
+  useEffect(() => {
+    if (search) {
+      handleSearch();
+    }
+    else{
+      getDirs();
+    }
+  }, [search]);
+
   useEffect(() => {
     getDirs();
     setTabs(
@@ -55,7 +83,7 @@ export default function ExplorerTab({
         newTab.id === tab.id ? { id: tab.id, path: searchPath } : newTab
       )
     );
-  }, [searchPath]);
+  }, [searchPath, refresh]);
 
   function goBack() {
     setSearchPath(searchPath.slice(0, searchPath.lastIndexOf("\\")));
@@ -79,11 +107,13 @@ export default function ExplorerTab({
         />
         <ArrowRight className="text-stone-300" />
         {/* {searchPath} */}
+        <Input value={searchPath}></Input>
         <Input
-          defaultValue={searchPath}
-          
-        ></Input>
-        <Input className="w-1/4" placeholder="Search..." />
+          className="w-1/4"
+          placeholder="Search..."
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Search onClick={handleSearch} />
         <ScanEye
           className={`hover:cursor-pointer transition-colors h-8 ${
             !isPreCollapsed ? "text-black" : "text-stone-400"
@@ -119,9 +149,16 @@ export default function ExplorerTab({
                     index={index}
                     setMainDir={setDirs}
                     setMainPath={setSearchPath}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
                   />
                 ) : (
-                  <FileItem dir={dir} index={index} />
+                  <FileItem
+                    dir={dir}
+                    index={index}
+                    refresh={refresh}
+                    setRefresh={setRefresh}
+                  />
                 )}
               </div>
             ))}

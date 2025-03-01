@@ -70,6 +70,7 @@ pub fn run() {
         )
         .invoke_handler(tauri::generate_handler![
             commands::get_home,
+            commands::search,
             commands::get_custom_dir,
             commands::get_home_path,
             commands::get_download_path,

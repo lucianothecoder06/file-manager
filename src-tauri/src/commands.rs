@@ -2,6 +2,7 @@ use dirs::{document_dir, download_dir, home_dir};
 use std::path::Path;
 use std::{fs, path::PathBuf, time::SystemTime};
 // use std::fs::File;
+use walkdir::WalkDir;
 
 #[derive(serde::Serialize)]
 pub struct DirInfo {
@@ -11,6 +12,52 @@ pub struct DirInfo {
     last_accessed: SystemTime,
     file_type: Option<String>,
     size: u64,
+}
+
+#[tauri::command]
+pub async fn search(custom_path: String, search_query: String) -> Result<Vec<DirInfo>, String> {
+    // let paths: fs::ReadDir = match fs::read_dir(custom_path) {
+    //     Ok(paths) => paths,
+    //     Err(e) => return Err(format!("Failed to read directory: {}", e)),
+    // };
+    let mut goodpaths: Vec<DirInfo> = Vec::new();
+    println!("search {} on path {}", search_query, custom_path);
+
+    for entry in WalkDir::new(custom_path).into_iter() {
+        let entry = match entry {
+            Ok(entry) => entry,
+            Err(e) => return Err(format!("Failed to read directory entry: {}", e)),
+        };
+
+        let name = entry.file_name().to_string_lossy().into_owned();
+        if name
+            .to_ascii_lowercase()
+            .contains(&search_query.to_ascii_lowercase())
+        {
+            let path = entry.path();
+            let accessed: SystemTime = match entry.metadata() {
+                Ok(metadata) => match metadata.accessed() {
+                    Ok(last_accessed) => last_accessed,
+                    Err(_) => SystemTime::now(),
+                },
+                Err(_) => SystemTime::now(),
+            };
+
+            let file_type = path
+                .extension()
+                .map(|ext| ext.to_string_lossy().into_owned());
+
+            goodpaths.push(DirInfo {
+                name: entry.file_name().to_string_lossy().into_owned(),
+                path: path.to_path_buf(),
+                is_dir: entry.file_type().is_dir(),
+                last_accessed: accessed,
+                file_type,
+                size: entry.metadata().map(|m| m.len()).unwrap_or(0),
+            });
+        }
+    }
+    Ok(goodpaths)
 }
 
 #[tauri::command]

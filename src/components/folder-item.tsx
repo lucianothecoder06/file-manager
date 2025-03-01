@@ -12,7 +12,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { Folder, FolderOpen, Wrench, Notebook } from "lucide-react";
+import { Folder, FolderOpen, Wrench, Notebook, Trash } from "lucide-react";
 import type { Dir } from "@/lib/types";
 import { invoke } from "@tauri-apps/api/core";
 import FileItem from "./file-item";
@@ -21,11 +21,15 @@ export default function FolderItem({
   index,
   setMainDir,
   setMainPath,
+  refresh,
+  setRefresh,
 }: {
   dir: Dir;
   index: number;
   setMainDir: (dirs: Dir[]) => void;
   setMainPath: (path: string) => void;
+  refresh: boolean;
+  setRefresh: (refresh: boolean) => void;
 }) {
   const [dirs, setDirs] = useState<Dir[]>([]);
   const [open, setOpen] = useState<boolean>(false);
@@ -37,6 +41,13 @@ export default function FolderItem({
     console.log(response);
     setDirs(response);
   }
+  const handleDelete = async () => {
+    await invoke("delete_folder", {
+      customPath: dir.path,
+    });
+    setRefresh(!refresh);
+  };
+
   useEffect(() => {
     getDirs();
   }, []);
@@ -69,9 +80,16 @@ export default function FolderItem({
                   index={subindex}
                   setMainDir={setMainDir}
                   setMainPath={setMainPath}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
                 />
               ) : (
-                <FileItem dir={dir} index={subindex} />
+                <FileItem
+                  dir={dir}
+                  index={subindex}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />
               )}
             </div>
           ))}
@@ -80,6 +98,10 @@ export default function FolderItem({
       <ContextMenuContent>
         <ContextMenuItem>Profile</ContextMenuItem>
         <ContextMenuItem>Billing</ContextMenuItem>
+        <ContextMenuItem onClick={handleDelete}>
+          <Trash className="h-5" />
+          Delete
+        </ContextMenuItem>
         <ContextMenuItem
           onClick={() => navigator.clipboard.writeText(dir.path)}
           className="flex items-center gap-2"

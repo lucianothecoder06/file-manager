@@ -36,18 +36,7 @@ function timeAgo(timestampSeconds: number): string {
 function getFileIcon(dir: Dir) {
   console.log(dir.file_type);
 
-  if (
-    dir.file_type === "jpg" ||
-    dir.file_type === "png" ||
-    dir.file_type === "jpeg"
-  ) {
-    console.log("hola");
-    return (
-      <picture>
-        <img src={`${dir.path}`} width="24px" height="24px" alt="." />;
-      </picture>
-    );
-  } else if (dir.file_type === "tsx") {
+  if (dir.file_type === "tsx") {
     return (
       <picture>
         <img src={`vivid/ts.svg`} width="16px" height="16px" alt="." />;
@@ -55,32 +44,45 @@ function getFileIcon(dir: Dir) {
     );
   } else {
     return (
-      <picture>
-        <img
-          src={`vivid/${dir.file_type}.svg`}
-          width="16px"
-          height="16px"
-          alt="."
-        />
-      </picture>
+      <div className="w-4 flex items-center justify-center">
+        <object
+          type="image/svg+xml"
+          data={`vivid/${dir.file_type}.svg`}
+          width={18}
+          height={20}
+          className="flex items-center justify-center"
+        ></object>
+      </div>
     );
   }
 }
 
-export default function FileItem({ dir, index }: { dir: Dir; index: number }) {
+export default function FileItem({
+  dir,
+  index,
+  refresh,
+  setRefresh,
+}: {
+  dir: Dir;
+  index: number;
+  refresh: boolean;
+  setRefresh: (refresh: boolean) => void;
+}) {
   const lastAccessed = timeAgo(dir.last_accessed.secs_since_epoch);
 
-  const handleDelete = async ()=>{
+  const handleDelete = async () => {
     await invoke("delete_file", {
       customPath: dir.path,
-    })
-  }
+    });
+    setRefresh(!refresh);
+  };
 
   return (
     <ContextMenu>
       <ContextMenuTrigger
-        className="text-black flex justify-between pr-4 col-span-1 gap-4"
+        className="text-black flex justify-between pr-4 col-span-1 gap-4  focus:border border-black"
         key={index}
+        
       >
         <div className="flex gap-4  hover:cursor-pointer">
           {getFileIcon(dir)}
@@ -94,7 +96,7 @@ export default function FileItem({ dir, index }: { dir: Dir; index: number }) {
       <ContextMenuContent>
         <ContextMenuItem>Profile</ContextMenuItem>
         <ContextMenuItem onClick={handleDelete}>
-          <Trash className="h-5"/>
+          <Trash className="h-5" />
           Delete
         </ContextMenuItem>
         <ContextMenuItem
